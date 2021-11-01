@@ -1,6 +1,7 @@
 const express = require('express')
 const { MongoClient } = require('mongodb');
 const ObjectId = require('mongodb').ObjectId;
+
 require('dotenv').config();
 
 const cors = require('cors');
@@ -62,7 +63,7 @@ async function run() {
             res.json(result);
         });
 
-        // checkOut all data api
+        // checkOut all data api 
         app.delete("/checkOut/:uid", async (req, res) => {
             const uid = req.params.uid;
             const query = { uid: uid };
