@@ -55,21 +55,44 @@ async function run() {
             res.json(result);
         });
 
-        // delete data from myOrder delete api
+        // delete data to  delete api
         app.delete('/remove/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await ordersCollection.deleteOne(query);
-            res.json(result);
+            // res.json(result);
+            console.log(result);
         });
 
         // checkOut all data api 
-        app.delete("/checkOut/:uid", async (req, res) => {
+        app.delete('/checkOut/:uid', async (req, res) => {
             const uid = req.params.uid;
             const query = { uid: uid };
-            const result = ordersCollection.deleteMany(query);
+            const result = await ordersCollection.deleteMany(query);
+            res.json(result);
+
+        });
+
+        // Orders get api
+        app.get("/orders", async (req, res) => {
+            const cursor = ordersCollection.find({});
+            const result = await cursor.toArray();
             res.json(result);
         });
+
+        // update api
+        app.put('/confirm/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    status: "Confirm"
+                },
+            };
+            const result = await ordersCollection.updateOne(filter, updateDoc, options);
+            res.json(result);
+        })
 
     } finally {
         //   await client.close();
